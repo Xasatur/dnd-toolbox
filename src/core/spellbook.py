@@ -1,6 +1,10 @@
 import json
+import os
 
-with open("spells.json", "r", encoding="utf-8") as file:
+# Pfad zur JSON-Datei relativ zu diesem Python-Script
+SPELLS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "spells.json"))
+
+with open(SPELLS_PATH, "r", encoding="utf-8") as file:
     spells = json.load(file)
 
 
@@ -15,7 +19,7 @@ def start():
         wahl = int(
             input(
                 """
-        Was möchtest du tun? 
+        Was möchtest du tun?
         1. Zauber nach Namen suchen
         2. Zauber nach Level filtern
         3. Zauber nach Klasse filtern

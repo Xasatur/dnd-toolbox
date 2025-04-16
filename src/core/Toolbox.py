@@ -1,6 +1,6 @@
 import spellbook
-import Looter
-import Combat
+import looter
+import combat
 
 
 def main_menu():
@@ -20,9 +20,9 @@ def main_menu():
             case "1":
                 spellbook.start()
             case "2":
-                Looter.start()
+                looter.start()
             case "3":
-                run_combat()
+                combat.run_combat()
             case "4":
                 print("beenden..")
                 break
