@@ -11,6 +11,7 @@ def main_menu():
                 1. Zauberbuch
                 2. Loot Generator
                 3. Combat helper
+                4. Beenden
                 """
         )
 
@@ -24,7 +25,7 @@ def main_menu():
             case "3":
                 combat.run_combat()
             case "4":
-                print("beenden..")
+                print("Beenden..")
                 break
             case _:
                 print("ungülige Eingabe")

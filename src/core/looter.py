@@ -1,30 +1,47 @@
 import random
+import os
+import json
+from dotenv import load_dotenv
 
-loot = {
-    "gewöhnlich": [{"name": "Rostiges Schwert"}, {"name": "kapute Stiefel"}],
-    "selten": [
-        {"name": "Magisches Schwert"},
-        {"name": "gute Stiefel"},
-        {"name": "Heiltrank"},
-    ],
-    "episch": [{"name": "Konny, der Drachentöter"}, {"name": "Stiefel des Hermes"}],
-}
+load_dotenv()
 
-mapping = {1: "gewöhnlich", 2: "selten", 3: "episch"}
+LOOT_FILE = os.getenv("LOOT_FILE", "data/loot.json")
 
+# Lade Loot-Daten aus JSON
+with open(LOOT_FILE, "r", encoding="utf-8") as f:
+    loot = json.load(f)
+
+mapping = {1: "common", 2: "uncommon", 3: "rare", 4: "very rare", 5: "legendary"}
 
 def start():
     while True:
-        wahl = int(input("Gib gegendstand ein mann:"))
-        anzahl = int(input("Wieviele Gegenstände?:"))
+        try:
+            wahl = int(input("Wähle Seltenheit (1=common, 2=uncommon, 3=rare, 4=very rare, 5=legendary, 9=beenden): "))
+        except ValueError:
+            print("❌ Bitte gib eine gültige Zahl ein.")
+            continue
 
-        if wahl in mapping:
-            seltenheit = mapping[wahl]
-            item = random.sample(loot[seltenheit], anzahl)
-            print("Du bekommst: ")
-            for i in item:
-                print(f'- {i["name"]}')
-        elif wahl == 9:
+        if wahl == 9:
+            print("Looter beendet.")
             break
-        else:
-            print("nö")
+
+        if wahl not in mapping:
+            print("❌ Ungültige Auswahl.")
+            continue
+
+        try:
+            anzahl = int(input("Wie viele Gegenstände?: "))
+        except ValueError:
+            print("❌ Bitte gib eine gültige Zahl ein.")
+            continue
+
+        seltenheit = mapping[wahl]
+
+        if seltenheit not in loot:
+            print(f"⚠️ Keine Gegenstände für Seltenheit '{seltenheit}' gefunden.")
+            continue
+
+        item = random.sample(loot[seltenheit], min(anzahl, len(loot[seltenheit])))
+        print("\n🎁 Du bekommst:")
+        for i in item:
+            print(f'- {i["name"]}')

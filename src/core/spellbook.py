@@ -16,7 +16,7 @@ def start():
     # class, filter spell by school, or exit). The input is then converted to an integer and stored in the
     # variable `wahl` for further processing based on the selected option.
     while True:
-        wahl = int(
+        wahl =(
             input(
                 """
         Was möchtest du tun?
@@ -30,7 +30,7 @@ def start():
         )
 
         match wahl:
-            case 1:
+            case "1":
                 name = input("Bitte gib den Namen eines Spells ein: ")
 
                 for spell in spells:
@@ -46,29 +46,30 @@ def start():
                         print("\n📖 Beschreibung:")
                         print(spell["description"])
                         print("══════════════════════════════════════")
-            case 2:
+            case "2":
                 level = input("Bitte gib den Level eines Spells ein: ")
 
                 for spell in spells:
                     if spell["level"] == level:
                         print(spell["name"])
 
-            case 3:
+            case "3":
                 tags = input("Bitte gib die Klasse eines Spells ein: ")
 
                 for spell in spells:
                     if spell["tags"] == tags:
                         print(spell["name"])
 
-            case 4:
+            case "4":
                 school = input("Bitte gib die Schule eines Spells ein: ")
 
                 for spell in spells:
                     if spell["school"] == school:
                         print(spell["name"])
 
-            case 5:
+            case "5":
                 print("Bye bye bye")
                 break
+
             case _:
                 print("Ungültige Eingabe")
