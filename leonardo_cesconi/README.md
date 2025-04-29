@@ -14,7 +14,7 @@ pyenv virtualenv 3.10.6 dnd_env
 pyenv activate dnd_env
 pip install -r requirements.txt
 ```
-
+The application expects a `.env` file for environment configuration.
 ---
 
 # How to Run
