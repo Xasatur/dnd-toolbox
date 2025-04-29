@@ -13,6 +13,14 @@ with open(LOOT_FILE, "r", encoding="utf-8") as f:
 
 mapping = {1: "common", 2: "uncommon", 3: "rare", 4: "very rare", 5: "legendary"}
 
+def get_loot_by_rarity(rarity: str, count: int) -> list[str]:
+    """Draw random loot items from the pool based on rarity."""
+    if rarity not in loot:
+        raise ValueError(f"Rarity '{rarity}' not found.")
+    sampled_items = random.sample(loot[rarity], min(count, len(loot[rarity])))
+    return [item["name"] for item in sampled_items]
+
+
 def start():
     while True:
         try:
@@ -37,11 +45,12 @@ def start():
 
         seltenheit = mapping[wahl]
 
-        if seltenheit not in loot:
-            print(f"⚠️ Keine Gegenstände für Seltenheit '{seltenheit}' gefunden.")
+        try:
+            item_names = get_loot_by_rarity(seltenheit, anzahl)
+        except ValueError as e:
+            print(f"⚠️ {e}")
             continue
 
-        item = random.sample(loot[seltenheit], min(anzahl, len(loot[seltenheit])))
         print("\n🎁 Du bekommst:")
-        for i in item:
-            print(f'- {i["name"]}')
+        for name in item_names:
+            print(f'- {name}')
