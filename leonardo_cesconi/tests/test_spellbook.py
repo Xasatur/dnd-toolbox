@@ -1,10 +1,7 @@
-import sys
-import os
+
 import pytest
 
 from src.core.spellbook import search_by_name, filter_by_level, filter_by_class, filter_by_school
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
 
 def test_search_by_name():
