@@ -15,6 +15,7 @@ pyenv activate dnd_env
 pip install -r requirements.txt
 ```
 The application expects a `.env` file for environment configuration.
+
 ---
 
 # How to Run
@@ -32,7 +33,7 @@ The toolbox will present a menu to access the Spellbook, Looter, and Combat modu
 
 # How to Launch the Interface
 
-An interactive user interface is planned with Streamlit. Current interaction is through the command line.
+
 
 ---
 
@@ -72,6 +73,35 @@ docker run -p 8000:8000 dnd_toolbox
 ```
 
 ---
+
+# Testing & Automation
+
+The project includes automated tests using `pytest`.
+
+### Run all tests
+
+```bash
+make test
+```
+
+### Format code with Black
+
+```bash
+make format
+```
+
+### Check code quality with Flake8
+
+```bash
+make lint
+```
+
+### Run all steps at once (test, format, lint)
+
+```bash
+./autotest.sh
+```
+
 
 # Expected Output
 
