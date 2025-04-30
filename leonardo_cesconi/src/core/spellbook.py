@@ -2,7 +2,9 @@ import json
 import os
 
 # Pfad zur JSON-Datei relativ zu diesem Python-Script
-SPELLS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "spells.json"))
+SPELLS_PATH = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "data", "spells.json")
+)
 
 with open(SPELLS_PATH, "r", encoding="utf-8") as file:
     spells = json.load(file)

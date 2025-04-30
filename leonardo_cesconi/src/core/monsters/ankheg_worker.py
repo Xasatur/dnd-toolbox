@@ -2,6 +2,7 @@
 import random
 import re
 
+
 # Use the same roll_dice utility
 def roll_dice(expression):
     match = re.match(r"(\d+)d(\d+)([+-]\\d+)?", expression)
@@ -11,6 +12,7 @@ def roll_dice(expression):
     rolls = [random.randint(1, int(dice_type)) for _ in range(int(num_dice))]
     total = sum(rolls) + int(modifier) if modifier else sum(rolls)
     return f"{total} ({rolls})"
+
 
 class Monster:
     name = "Ankheg Worker"

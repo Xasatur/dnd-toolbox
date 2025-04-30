@@ -4,6 +4,7 @@ import importlib.util
 import uuid
 import random
 
+
 # Helper to dynamically load a monster class from a Python file
 def load_monsters(folder=None):
     if folder is None:
@@ -23,6 +24,7 @@ def load_monsters(folder=None):
                 monsters.append((monster_class, name))
     return monsters
 
+
 class MonsterInstance:
     def __init__(self, monster_class, instance_id):
         self.id = instance_id
@@ -30,8 +32,11 @@ class MonsterInstance:
         self.name = self.instance.name
         self.icon = self.instance.icon
         self.recharge = getattr(self.instance, "recharge_actions", {})
-        self.bfa = self.instance.battlefield_actions() if hasattr(self.instance, "battlefield_actions") else []
-
+        self.bfa = (
+            self.instance.battlefield_actions()
+            if hasattr(self.instance, "battlefield_actions")
+            else []
+        )
 
     def actions(self):
         return self.instance.actions()
@@ -43,7 +48,10 @@ class MonsterInstance:
         for action, data in self.recharge.items():
             roll = random.randint(1, 6)
             data["available"] = roll in data["recharge_on"]
-            print(f"🔄 Recharge Check for {action}: Rolled {roll} → {'Ready' if data['available'] else 'Still Recharging'}")
+            print(
+                f"🔄 Recharge Check for {action}: Rolled {roll} → {'Ready' if data['available'] else 'Still Recharging'}"
+            )
+
 
 # Display actions and resolve input
 def run_combat():
@@ -80,7 +88,7 @@ def run_combat():
             print("Invalid selection.")
             continue
 
-        current = active_monsters[int(selection)-1]
+        current = active_monsters[int(selection) - 1]
 
         # Recharge Check
         if current.recharge:
@@ -89,15 +97,25 @@ def run_combat():
         # Resolve any pending Battlefield Actions
         for bfa in battlefield_queue[:]:
             if bfa["round"] == round_counter and bfa["monster_id"] == current.id:
-                print(f"\n⚠️ Battlefield Action Resolution for {bfa['name']}: {bfa['resolution']}")
+                print(
+                    f"\n⚠️ Battlefield Action Resolution for {bfa['name']}: {bfa['resolution']}"
+                )
                 battlefield_queue.remove(bfa)
 
         # Action Menu
         print(f"\n=== {current.icon} {current.name} Actions ===")
         actions = current.actions()
         for i, action_name in enumerate(actions):
-            note = " [Ready]" if action_name in current.recharge and current.recharge[action_name]["available"] else ""
-            if action_name in current.recharge and not current.recharge[action_name]["available"]:
+            note = (
+                " [Ready]"
+                if action_name in current.recharge
+                and current.recharge[action_name]["available"]
+                else ""
+            )
+            if (
+                action_name in current.recharge
+                and not current.recharge[action_name]["available"]
+            ):
                 note = " [Recharging]"
             print(f"{i+1}. {action_name}{note}")
 
@@ -105,26 +123,35 @@ def run_combat():
             print("b. ⚔️  Trigger Battlefield Action Tell")
         print("x. Back")
 
-        action_choice = input("Choose one or more actions (e.g. 1,2,3): ").strip().lower()
+        action_choice = (
+            input("Choose one or more actions (e.g. 1,2,3): ").strip().lower()
+        )
         if action_choice == "x":
             continue
         elif action_choice == "b" and current.battlefield_actions():
             print("\n📣 Battlefield Actions:")
             for bfa in current.battlefield_actions():
                 print(f"🌪️ {bfa['name']}: {bfa['tell']}")
-                battlefield_queue.append({
-                    "name": bfa['name'],
-                    "monster_id": current.id,
-                    "round": round_counter + 1,
-                    "resolution": bfa['resolution']
-                })
+                battlefield_queue.append(
+                    {
+                        "name": bfa["name"],
+                        "monster_id": current.id,
+                        "round": round_counter + 1,
+                        "resolution": bfa["resolution"],
+                    }
+                )
         else:
-            action_indexes = [s.strip() for s in action_choice.split(",") if s.strip().isdigit()]
+            action_indexes = [
+                s.strip() for s in action_choice.split(",") if s.strip().isdigit()
+            ]
             for a in action_indexes:
                 i = int(a)
                 if 1 <= i <= len(actions):
-                    action_name = list(actions.keys())[i-1]
-                    if action_name in current.recharge and not current.recharge[action_name]["available"]:
+                    action_name = list(actions.keys())[i - 1]
+                    if (
+                        action_name in current.recharge
+                        and not current.recharge[action_name]["available"]
+                    ):
                         print(f"⛔ {action_name} is still recharging.")
                         continue
                     result = actions[action_name]()

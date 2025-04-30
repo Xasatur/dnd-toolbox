@@ -2,6 +2,7 @@
 import random
 import re
 
+
 # Dice roller for damage strings like "2d6+3"
 def roll_dice(expression):
     match = re.match(r"(\d+)d(\d+)([+-]\d+)?", expression)
@@ -12,17 +13,12 @@ def roll_dice(expression):
     total = sum(rolls) + int(modifier) if modifier else sum(rolls)
     return f"{total} ({rolls})"
 
+
 class Monster:
-    
+
     name = "Ankheg Brood Queen"
     icon = "🐛"
-    recharge_actions = {
-        "Acid Spray": {
-            "recharge_on": [6],
-            "available": True
-        }
-    }
-
+    recharge_actions = {"Acid Spray": {"recharge_on": [6], "available": True}}
 
     def actions(self):
         return {
@@ -34,7 +30,9 @@ class Monster:
             "Pressurized Carapace (on Death)": self.pressurized_carapace,
             "Legendary: Burrow": lambda: self.legendary_action("burrow"),
             "Legendary: Pull": lambda: self.legendary_action("pull"),
-            "Legendary: Acid Expulsion": lambda: self.legendary_action("acid expulsion"),
+            "Legendary: Acid Expulsion": lambda: self.legendary_action(
+                "acid expulsion"
+            ),
         }
 
     def battlefield_actions(self):
@@ -43,14 +41,14 @@ class Monster:
                 "name": "Summoning Circles",
                 "tell": "Two glowing summoning circles pulse with energy...",
                 "neutralize": "Stand on the circles to stop the summoning.",
-                "resolution": "If not neutralized, two Ankheg minions are summoned."
+                "resolution": "If not neutralized, two Ankheg minions are summoned.",
             },
             {
                 "name": "Eruption",
                 "tell": "The ground cracks beneath the Queen's weight, glowing with heat...",
                 "neutralize": "Move more than 20 feet from the center to reduce damage.",
-                "resolution": "The ground erupts. Creatures within 20ft take full damage. Others take less."
-            }
+                "resolution": "The ground erupts. Creatures within 20ft take full damage. Others take less.",
+            },
         ]
 
     def claw_attack(self):
@@ -81,7 +79,9 @@ class Monster:
         bludgeon = roll_dice("1d6")
         acid = roll_dice("5d6")
         total = int(bludgeon.split()[0]) + int(acid.split()[0])
-        return f"DC 16 Dex Save | Total: {total} | Bludgeoning: {bludgeon}, Acid: {acid}"
+        return (
+            f"DC 16 Dex Save | Total: {total} | Bludgeoning: {bludgeon}, Acid: {acid}"
+        )
 
     def legendary_action(self, action):
         if action == "burrow":
