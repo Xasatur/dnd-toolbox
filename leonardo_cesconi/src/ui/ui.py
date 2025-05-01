@@ -61,6 +61,19 @@ elif tool == "Combat Helper":
             monster_names = [f"{m['icon']} {m['name']}" for m in monsters]
             selection = st.selectbox("Wähle ein Monster:", monster_names)
             st.success(f"Ausgewähltes Monster: {selection}")
+
+            selected_monsters = st.multiselect("Wähle Monster zum Hinzufügen:", monster_names)
+
+            if selected_monsters:
+                st.subheader("Aktive Monster")
+                for monster in selected_monsters:
+                    st.markdown(f"### {monster}")
+                    st.markdown("**Aktionen:**")
+                    # Simulierte Aktionen – später durch API ersetzen
+                    dummy_actions = ["Claw Attack", "Bite", "Acid Spray"]
+                    for action in dummy_actions:
+                        if st.button(f"{monster} - {action}"):
+                            st.success(f"{monster} führt '{action}' aus! 🎯")
         else:
             st.warning("Keine Monster gefunden.")
     else:
