@@ -7,7 +7,13 @@ tool = st.sidebar.selectbox("Wähle ein Tool:", ["Loot Generator", "Zauberbuch"]
 
 if tool == "Loot Generator":
     st.header("🎁 Loot Generator")
-    rarity_labels = {"gewöhnlich": "common", "selten": "rare", "episch": "very rare"}
+    rarity_labels = {
+    "gewöhnlich": "common",
+    "ungewöhnlich": "uncommon",
+    "selten": "rare",
+    "sehr selten": "very rare",
+    "legendär": "legendary"
+}
     rarity_display = st.selectbox("Seltenheit", list(rarity_labels.keys()))
     rarity = rarity_labels[rarity_display]
     amount = st.slider("Wie viele Items?", 1, 5, 1)
