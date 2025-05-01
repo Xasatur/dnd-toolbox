@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Query
 from typing import Optional
+from src.core.looter import get_loot_by_rarity
+from src.core.spellbook import search_by_name, filter_by_level, filter_by_class, filter_by_school
 
 app = FastAPI()
 
@@ -10,18 +12,24 @@ def root():
 
 
 @app.get("/spells")
-def get_spells(name: Optional[str] = Query(None)):
-    # Fake Example (wird später ersetzt durch JSON-Parsing)
+def get_spells(name: Optional[str] = None, level: Optional[str] = None, klass: Optional[str] = None, school: Optional[str] = None):
     if name:
-        return {"spells": [f"Zauber gefunden: {name}"]}
-    return {"spells": ["Feuerball", "Magie entdecken", "Teleport"]}
+        spell = search_by_name(name)
+        return {"spells": [spell] if spell else []}
+    elif level:
+        return {"spells": filter_by_level(level)}
+    elif klass:
+        return {"spells": filter_by_class(klass)}
+    elif school:
+        return {"spells": filter_by_school(school)}
+    else:
+        return {"error": "Bitte gib mindestens einen Filterparameter an (name, level, klass, school)."}
 
 
 @app.get("/loot")
-def get_loot(rarity: int = 1, amount: int = 1):
-    # Fake Example (wird später mit echter Loot-Liste ersetzt)
-    rarities = {1: "gewöhnlich", 2: "selten", 3: "episch"}
-    return {
-        "rarity": rarities.get(rarity, "unbekannt"),
-        "items": [f"Gegenstand {i+1}" for i in range(amount)],
-    }
+def get_loot(rarity: str = "common", amount: int = 1):
+    try:
+        items = get_loot_by_rarity(rarity, amount)
+        return {"rarity": rarity, "items": items}
+    except ValueError as e:
+        return {"error": str(e)}
