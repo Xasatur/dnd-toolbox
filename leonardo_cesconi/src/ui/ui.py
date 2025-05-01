@@ -1,5 +1,7 @@
 import streamlit as st
 import requests
+from src.core.combat import load_monsters, MonsterInstance
+import uuid
 
 st.title("🧙‍♂️ DnD Toolbox")
 
@@ -54,6 +56,10 @@ elif tool == "Zauberbuch":
 elif tool == "Combat Helper":
     st.header("⚔️ Combat Helper")
 
+    if st.button("🧹 Arena zurücksetzen"):
+        st.session_state.combat_monsters = []
+        st.success("Arena wurde geleert.")
+
     response = requests.get("http://localhost:8000/monsters")
     if response.status_code == 200:
         monsters = response.json().get("monsters", [])
@@ -64,16 +70,28 @@ elif tool == "Combat Helper":
 
             selected_monsters = st.multiselect("Wähle Monster zum Hinzufügen:", monster_names)
 
-            if selected_monsters:
-                st.subheader("Aktive Monster")
-                for monster in selected_monsters:
-                    st.markdown(f"### {monster}")
-                    st.markdown("**Aktionen:**")
-                    # Simulierte Aktionen – später durch API ersetzen
-                    dummy_actions = ["Claw Attack", "Bite", "Acid Spray"]
-                    for action in dummy_actions:
-                        if st.button(f"{monster} - {action}"):
-                            st.success(f"{monster} führt '{action}' aus! 🎯")
+            if "combat_monsters" not in st.session_state:
+                st.session_state.combat_monsters = []
+
+            if st.button("Monster zur Arena hinzufügen"):
+                available = {f"{m['icon']} {m['name']}": m["name"] for m in monsters}
+                for label in selected_monsters:
+                    name = available[label]
+                    monster_class = next((cls for cls, id in load_monsters() if cls().name == name), None)
+                    if monster_class:
+                        mid = str(uuid.uuid4())[:4]
+                        instance = MonsterInstance(monster_class, mid)
+                        st.session_state.combat_monsters.append(instance)
+
+            if st.session_state.combat_monsters:
+                st.subheader("🧟 Aktive Monster")
+                for m in st.session_state.combat_monsters:
+                    st.markdown(f"### {m.icon} {m.name} [ID: {m.id}]")
+                    actions = m.actions()
+                    for i, action in enumerate(actions):
+                        if st.button(f"{m.id} - {action}"):
+                            result = actions[action]()
+                            st.success(f"🎯 {action}:\n{result}")
         else:
             st.warning("Keine Monster gefunden.")
     else:
