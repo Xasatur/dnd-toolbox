@@ -3,7 +3,7 @@ import requests
 
 st.title("🧙‍♂️ DnD Toolbox")
 
-tool = st.sidebar.selectbox("Wähle ein Tool:", ["Loot Generator", "Zauberbuch"])
+tool = st.sidebar.selectbox("Wähle ein Tool:", ["Loot Generator", "Zauberbuch", "Combat Helper"])
 
 if tool == "Loot Generator":
     st.header("🎁 Loot Generator")
@@ -50,3 +50,18 @@ elif tool == "Zauberbuch":
             st.markdown(spell["description"])
         else:
             st.warning("Kein Zauber gefunden.")
+
+elif tool == "Combat Helper":
+    st.header("⚔️ Combat Helper")
+
+    response = requests.get("http://localhost:8000/monsters")
+    if response.status_code == 200:
+        monsters = response.json().get("monsters", [])
+        if monsters:
+            monster_names = [f"{m['icon']} {m['name']}" for m in monsters]
+            selection = st.selectbox("Wähle ein Monster:", monster_names)
+            st.success(f"Ausgewähltes Monster: {selection}")
+        else:
+            st.warning("Keine Monster gefunden.")
+    else:
+        st.error("Fehler beim Abrufen der Monster.")
