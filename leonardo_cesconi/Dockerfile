@@ -9,6 +9,8 @@ COPY . .
 
 RUN apt-get update && apt-get install -y make
 
+ENV PYTHONPATH=/app
+
 # Install project and dependencies via setup.py
 RUN pip install --no-cache-dir .
 
