@@ -15,4 +15,5 @@ lint:
 
 # Starte FastAPI-Server
 run:
-	uvicorn src.api.app:app --reload
+	uvicorn src.api.app:app --reload & \
+	streamlit run src/ui/ui.py
