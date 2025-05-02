@@ -16,6 +16,9 @@ pip install -r requirements.txt
 ```
 The application expects a `.env` file for environment configuration.
 
+Optionally, create a .python-version file with the content dnd_env to auto-activate the environment when entering the project folder.
+
+
 ---
 
 # How to Run
