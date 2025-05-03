@@ -37,6 +37,11 @@ The toolbox will present a menu to access the Spellbook, Looter, and Combat modu
 # How to Launch the Interface
 
 
+To start both the backend (FastAPI) and the frontend (Streamlit), run:
+
+```bash
+make run
+
 
 ---
 
@@ -58,21 +63,53 @@ Basic CLI interaction is available through user menu selections inside `Toolbox.
 
 # API
 
-An API will be implemented using FastAPI.
+Implemented using FastAPI. Available endpoints:
 
+	•	GET /loot?rarity=rare – Filter loot by rarity
+	•	GET /spells?level=3 – Filter spells by level
+	•	GET /monsters – List available monsters
+	•	POST /combat – Submit a combat round (coming soon)
 
-- `GET /loot?rarity=rare`
-- `GET /spells?level=3`
+The backend is served with uvicorn.
+
+---
+
+# Frontend (Streamlit UI)
+
+A simple web interface allows users to:
+	•	Search spells by name, class, level, school
+	•	Generate loot by rarity
+	•	Simulate combat by selecting monsters and triggering their actions
+
+Streamlit is used to render the UI at localhost:8501.
 
 ---
 
 # Docker
 
-A Dockerfile will be added.
+A Dockerfile is provided to containerize the entire project. Build and run with:
 
 ```bash
 docker build -t dnd_toolbox .
-docker run -p 8000:8000 dnd_toolbox
+docker run -p 8000:8000 -p 8501:8501 dnd_toolbox
+```
+
+Make sure ports 8000 and 8501 are available.
+
+This launches both API and Streamlit UI in a container.
+
+
+
+---
+
+# Packaging (setup.py)
+
+This project uses Python packaging conventions:
+	•	setup.py defines the installable structure
+	•	Install it locally with:
+
+```bash
+pip install .
 ```
 
 ---
