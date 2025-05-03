@@ -1,10 +1,10 @@
 # DnD Toolbox
 
-Welcome to the **DnD Toolbox** – a modular command-line application for Dungeons & Dragons game masters. This tool helps you manage spells, generate loot, and simulate monster combat behavior.
+Welcome to the **DnD Toolbox** – a modular toolset with CLI, API and web-interface for Dungeons & Dragons game masters. This tool helps you manage spells, generate loot, and simulate monster combat behavior.
 
 ---
 
-# Setup Instructions
+## Setup Instructions
 
 Run the following commands to set up the project:
 
@@ -21,7 +21,7 @@ Optionally, create a .python-version file with the content dnd_env to auto-activ
 
 ---
 
-# How to Run
+### How to Run
 
 Use the following to launch the toolbox:
 
@@ -34,18 +34,24 @@ The toolbox will present a menu to access the Spellbook, Looter, and Combat modu
 
 ---
 
-# How to Launch the Interface
+### How to Launch the Interface
 
 
 To start both the backend (FastAPI) and the frontend (Streamlit), run:
 
 ```bash
 make run
+```
 
 
 ---
+## CLI
 
-# Example Commands
+Basic CLI interaction is available through user menu selections inside `Toolbox.py`.
+
+---
+
+### Example Commands
 
 ```bash
 python Toolbox.py
@@ -55,13 +61,8 @@ More CLI arguments will be added.
 
 ---
 
-# CLI
 
-Basic CLI interaction is available through user menu selections inside `Toolbox.py`.
-
----
-
-# API
+## API
 
 Implemented using FastAPI. Available endpoints:
 
@@ -74,7 +75,7 @@ The backend is served with uvicorn.
 
 ---
 
-# Frontend (Streamlit UI)
+## Frontend (Streamlit UI)
 
 A simple web interface allows users to:
 	•	Search spells by name, class, level, school
@@ -85,7 +86,7 @@ Streamlit is used to render the UI at localhost:8501.
 
 ---
 
-# Docker
+## Docker
 
 A Dockerfile is provided to containerize the entire project. Build and run with:
 
@@ -102,7 +103,7 @@ This launches both API and Streamlit UI in a container.
 
 ---
 
-# Packaging (setup.py)
+## Packaging (setup.py)
 
 This project uses Python packaging conventions:
 	•	setup.py defines the installable structure
@@ -114,7 +115,7 @@ pip install .
 
 ---
 
-# Testing & Automation
+## Testing & Automation
 
 The project includes automated tests using `pytest`.
 
@@ -143,7 +144,7 @@ make lint
 ```
 
 
-# Expected Output
+## Expected Output
 
 - Spells filtered by name, school, class, level
 - Loot items based on rarity
@@ -151,7 +152,7 @@ make lint
 
 ---
 
-# Dependencies and Environment Info
+## Dependencies and Environment Info
 
 Main libraries used:
 
@@ -166,7 +167,7 @@ Virtual environment created using `pyenv` and `pyenv-virtualenv`.
 
 ---
 
-# Credits
+## Credits
 
 - Created by Leonardo Cesconi
 - Project for the IAI Module @ HSLU (Spring 2025)
