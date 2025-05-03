@@ -1,5 +1,6 @@
 import json
 import os
+import argparse
 
 # Pfad zur JSON-Datei relativ zu diesem Python-Script
 SPELLS_PATH = os.path.abspath(
@@ -78,3 +79,47 @@ def start():
                 break
             case _:
                 print("Ungültige Eingabe")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Spellbook CLI Tool")
+
+    parser.add_argument("--search", type=str, help="Search spell by name")
+    parser.add_argument("--level", type=str, help="Filter spells by level")
+    parser.add_argument("--class_", type=str, help="Filter spells by class (tag)")
+    parser.add_argument("--school", type=str, help="Filter spells by school")
+
+    args = parser.parse_args()
+
+    if args.search:
+        spell = search_by_name(args.search)
+        if spell:
+            print("══════════════════════════════════════")
+            print(f"🪄 {spell['name']}")
+            print("══════════════════════════════════════")
+            print(f"🔢 Level:         {spell['level']}")
+            print(f"📚 Schule:        {spell['school'].capitalize()}")
+            print(f"⏱  Cast Time:     {spell['casting_time']}")
+            print(f"⏳ Dauer:          {spell['duration']}")
+            print(f"🎯 Reichweite:    {spell['range']}")
+            print("\n📖 Beschreibung:")
+            print(spell["description"])
+            print("══════════════════════════════════════")
+        else:
+            print("Spell not found.")
+    elif args.level:
+        spells_filtered = filter_by_level(args.level)
+        print(f"Spells with level {args.level}:")
+        for s in spells_filtered:
+            print(f"- {s['name']}")
+    elif args.class_:
+        spells_filtered = filter_by_class(args.class_)
+        print(f"Spells for class {args.class_}:")
+        for s in spells_filtered:
+            print(f"- {s['name']}")
+    elif args.school:
+        spells_filtered = filter_by_school(args.school)
+        print(f"Spells from school {args.school}:")
+        for s in spells_filtered:
+            print(f"- {s['name']}")
+    else:
+        start()

@@ -44,15 +44,26 @@ def main():
         type=str,
         help="Seltenheit (für Loot Generator)"
     )
-
     parser.add_argument(
     "--count", type=int, help="Number of loot items to draw (only for looter module)"
 )
+    parser.add_argument("--search", type=str, help="Search spell by name")
+    parser.add_argument("--level", type=int, help="Filter spells by level")
+    parser.add_argument("--class_", type=str, help="Filter spells by class")
+    parser.add_argument("--school", type=str, help="Filter spells by school")
 
     args = parser.parse_args()
 
     if args.module == "spellbook":
-        spellbook.start()
+        if args.search or args.level or args.class_ or args.school:
+            spellbook.main(
+                search=args.search,
+                level=args.level,
+                class_filter=args.class_,
+                school=args.school
+            )
+        else:
+            spellbook.start()
     elif args.module == "looter":
         looter.start(rarity=args.rarity, count=args.count)
     elif args.module == "combat":
