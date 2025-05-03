@@ -19,7 +19,7 @@ The application expects a `.env` file for environment configuration.
 Optionally, create a .python-version file with the content dnd_env to auto-activate the environment when entering the project folder.
 
 
----
+
 
 ### How to Run
 
@@ -32,7 +32,7 @@ python Toolbox.py
 
 The toolbox will present a menu to access the Spellbook, Looter, and Combat modules.
 
----
+
 
 ### How to Launch the Interface
 
@@ -49,7 +49,7 @@ make run
 
 Basic CLI interaction is available through user menu selections inside `Toolbox.py`.
 
----
+
 
 ### Example Commands
 
@@ -143,6 +143,7 @@ make lint
 ./autotest.sh
 ```
 
+---
 
 ## Expected Output
 
