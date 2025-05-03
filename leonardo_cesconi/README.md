@@ -47,7 +47,7 @@ make run
 ---
 ## CLI
 
-Basic CLI interaction is available through user menu selections inside `Toolbox.py`.
+The toolbox can be launched with an interactive menu or directly via CLI arguments.
 
 
 
@@ -57,10 +57,34 @@ Basic CLI interaction is available through user menu selections inside `Toolbox.
 python Toolbox.py
 ```
 
-More CLI arguments will be added.
+### Loot Generator
+You can generate loot directly by specifying rarity and count:
 
----
+```bash
+python src/core/Toolbox.py --module looter --rarity rare --count 3
 
+#This returns 3 random loot items with the specified rarity.
+```
+
+### Spellbook Search
+
+You can search spells by providing filters:
+
+```bash
+python src/core/Toolbox.py --module spellbook --level 3
+
+#This returns all level 3 spells.
+```
+
+Other options:
+
+```bash
+python src/core/Toolbox.py --module spellbook --class Wizard
+python src/core/Toolbox.py --module spellbook --school Evocation
+python src/core/Toolbox.py --module spellbook --search Fireball
+
+#Filtes by class, school or name.
+```
 
 ## API
 
