@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-LOOT_FILE = os.getenv("LOOT_FILE", "data/loot.json")
+LOOT_FILE = os.getenv("LOOT_FILE")
 
 # Lade Loot-Daten aus JSON
 with open(LOOT_FILE, "r", encoding="utf-8") as f:
@@ -22,40 +22,38 @@ def get_loot_by_rarity(rarity: str, count: int) -> list[str]:
     return [item["name"] for item in sampled_items]
 
 
-def start():
-    while True:
-        try:
-            wahl = int(
-                input(
-                    "Wähle Seltenheit (1=common, 2=uncommon, 3=rare, 4=very rare, 5=legendary, 9=beenden): "
-                )
-            )
-        except ValueError:
-            print("❌ Bitte gib eine gültige Zahl ein.")
-            continue
+def start(rarity=None, count=None):
+    if rarity and count:
+        print("\n🎁 Du bekommst:")
+        for item in get_loot_by_rarity(rarity, count):
+            print(f"- {item}")
+        print("Looter beendet.\n")
+        return
 
-        if wahl == 9:
+    # Interaktiver Modus, falls keine Argumente übergeben wurden
+    while True:
+        print("Wähle Seltenheit (1=common, 2=uncommon, 3=rare, 4=very rare, 5=legendary, 9=beenden): ", end="")
+        auswahl = input()
+
+        if auswahl == "9":
             print("Looter beendet.")
             break
 
-        if wahl not in mapping:
-            print("❌ Ungültige Auswahl.")
+        mapping = {
+            "1": "common",
+            "2": "uncommon",
+            "3": "rare",
+            "4": "very rare",
+            "5": "legendary"
+        }
+
+        if auswahl not in mapping:
+            print("Ungültige Eingabe.")
             continue
 
-        try:
-            anzahl = int(input("Wie viele Gegenstände?: "))
-        except ValueError:
-            print("❌ Bitte gib eine gültige Zahl ein.")
-            continue
-
-        seltenheit = mapping[wahl]
-
-        try:
-            item_names = get_loot_by_rarity(seltenheit, anzahl)
-        except ValueError as e:
-            print(f"⚠️ {e}")
-            continue
+        rarity = mapping[auswahl]
+        count = int(input("Wie viele Gegenstände?: "))
 
         print("\n🎁 Du bekommst:")
-        for name in item_names:
-            print(f"- {name}")
+        for item in get_loot_by_rarity(rarity, count):
+            print(f"- {item}")

@@ -1,3 +1,4 @@
+import argparse
 import spellbook
 import looter
 import combat
@@ -31,5 +32,34 @@ def main_menu():
                 print("ungülige Eingabe")
 
 
+def main():
+    parser = argparse.ArgumentParser(description="DnD Toolbox CLI")
+    parser.add_argument(
+        "--module",
+        choices=["spellbook", "looter", "combat"],
+        help="Modul, das direkt gestartet werden soll"
+    )
+    parser.add_argument(
+        "--rarity",
+        type=str,
+        help="Seltenheit (für Loot Generator)"
+    )
+
+    parser.add_argument(
+    "--count", type=int, help="Number of loot items to draw (only for looter module)"
+)
+
+    args = parser.parse_args()
+
+    if args.module == "spellbook":
+        spellbook.start()
+    elif args.module == "looter":
+        looter.start(rarity=args.rarity, count=args.count)
+    elif args.module == "combat":
+        combat.run_combat()
+    else:
+        main_menu()
+
+
 if __name__ == "__main__":
-    main_menu()
+    main()
