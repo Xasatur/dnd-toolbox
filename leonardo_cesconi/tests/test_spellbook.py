@@ -24,7 +24,7 @@ def test_filter_by_level():
 def test_filter_by_class():
     results = filter_by_class("wizard")
     assert isinstance(results, list)
-    assert all(spell["tags"] == "wizard" for spell in results)
+    assert all("wizard" in [tag.lower() for tag in spell["tags"]] for spell in results)
 
 
 def test_filter_by_school():

@@ -1,7 +1,12 @@
 from fastapi import FastAPI, Query
 from typing import Optional
 from src.core.looter import get_loot_by_rarity
-from src.core.spellbook import search_by_name, filter_by_level, filter_by_class, filter_by_school
+from src.core.spellbook import (
+    search_by_name,
+    filter_by_level,
+    filter_by_class,
+    filter_by_school,
+)
 from src.core.combat import load_monsters
 
 app = FastAPI()
@@ -13,7 +18,12 @@ def root():
 
 
 @app.get("/spells")
-def get_spells(name: Optional[str] = None, level: Optional[str] = None, klass: Optional[str] = None, school: Optional[str] = None):
+def get_spells(
+    name: Optional[str] = None,
+    level: Optional[str] = None,
+    klass: Optional[str] = None,
+    school: Optional[str] = None,
+):
     if name:
         spell = search_by_name(name)
         return {"spells": [spell] if spell else []}
@@ -24,7 +34,9 @@ def get_spells(name: Optional[str] = None, level: Optional[str] = None, klass: O
     elif school:
         return {"spells": filter_by_school(school)}
     else:
-        return {"error": "Bitte gib mindestens einen Filterparameter an (name, level, klass, school)."}
+        return {
+            "error": "Bitte gib mindestens einen Filterparameter an (name, level, klass, school)."
+        }
 
 
 @app.get("/loot")

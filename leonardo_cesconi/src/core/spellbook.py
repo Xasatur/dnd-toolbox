@@ -18,16 +18,26 @@ def search_by_name(name: str):
     return None
 
 
-def filter_by_level(level: str):
-    return [spell for spell in spells if spell["level"] == level]
+def filter_by_level(level):
+    return [
+        spell for spell in spells if str(spell["level"]).strip() == str(level).strip()
+    ]
 
 
-def filter_by_class(tag: str):
-    return [spell for spell in spells if spell["tags"] == tag]
+def filter_by_class(tag):
+    return [
+        spell
+        for spell in spells
+        if any(t.lower().strip() == tag.lower().strip() for t in spell["tags"])
+    ]
 
 
-def filter_by_school(school: str):
-    return [spell for spell in spells if spell["school"] == school]
+def filter_by_school(school):
+    return [
+        spell
+        for spell in spells
+        if spell["school"].strip().lower() == school.strip().lower()
+    ]
 
 
 def start():
@@ -80,6 +90,7 @@ def start():
             case _:
                 print("Ungültige Eingabe")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Spellbook CLI Tool")
 
@@ -119,6 +130,42 @@ if __name__ == "__main__":
     elif args.school:
         spells_filtered = filter_by_school(args.school)
         print(f"Spells from school {args.school}:")
+        for s in spells_filtered:
+            print(f"- {s['name']}")
+    else:
+        start()
+
+
+def main(search=None, level=None, class_filter=None, school=None):
+    if search:
+        spell = search_by_name(search)
+        if spell:
+            print("══════════════════════════════════════")
+            print(f"🪄 {spell['name']}")
+            print("══════════════════════════════════════")
+            print(f"🔢 Level:         {spell['level']}")
+            print(f"📚 Schule:        {spell['school'].capitalize()}")
+            print(f"⏱  Cast Time:     {spell['casting_time']}")
+            print(f"⏳ Dauer:          {spell['duration']}")
+            print(f"🎯 Reichweite:    {spell['range']}")
+            print("\n📖 Beschreibung:")
+            print(spell["description"])
+            print("══════════════════════════════════════")
+        else:
+            print("Spell not found.")
+    elif level:
+        spells_filtered = filter_by_level(level)
+        print(f"Spells with level {level}:")
+        for s in spells_filtered:
+            print(f"- {s['name']}")
+    elif class_filter:
+        spells_filtered = filter_by_class(class_filter)
+        print(f"Spells for class {class_filter}:")
+        for s in spells_filtered:
+            print(f"- {s['name']}")
+    elif school:
+        spells_filtered = filter_by_school(school)
+        print(f"Spells from school {school}:")
         for s in spells_filtered:
             print(f"- {s['name']}")
     else:

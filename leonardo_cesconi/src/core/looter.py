@@ -32,7 +32,10 @@ def start(rarity=None, count=None):
 
     # Interaktiver Modus, falls keine Argumente übergeben wurden
     while True:
-        print("Wähle Seltenheit (1=common, 2=uncommon, 3=rare, 4=very rare, 5=legendary, 9=beenden): ", end="")
+        print(
+            "Wähle Seltenheit (1=common, 2=uncommon, 3=rare, 4=very rare, 5=legendary, 9=beenden): ",
+            end="",
+        )
         auswahl = input()
 
         if auswahl == "9":
@@ -44,7 +47,7 @@ def start(rarity=None, count=None):
             "2": "uncommon",
             "3": "rare",
             "4": "very rare",
-            "5": "legendary"
+            "5": "legendary",
         }
 
         if auswahl not in mapping:

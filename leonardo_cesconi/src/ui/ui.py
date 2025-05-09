@@ -1,5 +1,6 @@
 import sys
 import os
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 import streamlit as st
 import requests
@@ -8,17 +9,19 @@ import uuid
 
 st.title("🧙‍♂️ DnD Toolbox")
 
-tool = st.sidebar.selectbox("Wähle ein Tool:", ["Loot Generator", "Zauberbuch", "Combat Helper"])
+tool = st.sidebar.selectbox(
+    "Wähle ein Tool:", ["Loot Generator", "Zauberbuch", "Combat Helper"]
+)
 
 if tool == "Loot Generator":
     st.header("🎁 Loot Generator")
     rarity_labels = {
-    "gewöhnlich": "common",
-    "ungewöhnlich": "uncommon",
-    "selten": "rare",
-    "sehr selten": "very rare",
-    "legendär": "legendary"
-}
+        "gewöhnlich": "common",
+        "ungewöhnlich": "uncommon",
+        "selten": "rare",
+        "sehr selten": "very rare",
+        "legendär": "legendary",
+    }
     rarity_display = st.selectbox("Seltenheit", list(rarity_labels.keys()))
     rarity = rarity_labels[rarity_display]
     amount = st.slider("Wie viele Items?", 1, 5, 1)
@@ -26,7 +29,7 @@ if tool == "Loot Generator":
     if st.button("Loot generieren"):
         response = requests.get(
             "http://localhost:8000/loot", params={"rarity": rarity, "amount": amount}
-            )
+        )
         data = response.json()
         if response.status_code == 200 and "items" in data:
             st.write(f"**Seltenheit:** {data['rarity']}")
@@ -71,7 +74,9 @@ elif tool == "Combat Helper":
             selection = st.selectbox("Wähle ein Monster:", monster_names)
             st.success(f"Ausgewähltes Monster: {selection}")
 
-            selected_monsters = st.multiselect("Wähle Monster zum Hinzufügen:", monster_names)
+            selected_monsters = st.multiselect(
+                "Wähle Monster zum Hinzufügen:", monster_names
+            )
 
             if "combat_monsters" not in st.session_state:
                 st.session_state.combat_monsters = []
@@ -80,7 +85,9 @@ elif tool == "Combat Helper":
                 available = {f"{m['icon']} {m['name']}": m["name"] for m in monsters}
                 for label in selected_monsters:
                     name = available[label]
-                    monster_class = next((cls for cls, id in load_monsters() if cls().name == name), None)
+                    monster_class = next(
+                        (cls for cls, id in load_monsters() if cls().name == name), None
+                    )
                     if monster_class:
                         mid = str(uuid.uuid4())[:4]
                         instance = MonsterInstance(monster_class, mid)
