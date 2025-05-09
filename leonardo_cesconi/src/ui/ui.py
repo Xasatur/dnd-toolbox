@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 import streamlit as st
 import requests
 from src.core.combat import load_monsters, MonsterInstance
@@ -23,7 +26,7 @@ if tool == "Loot Generator":
     if st.button("Loot generieren"):
         response = requests.get(
             "http://localhost:8000/loot", params={"rarity": rarity, "amount": amount}
-        )
+            )
         data = response.json()
         if response.status_code == 200 and "items" in data:
             st.write(f"**Seltenheit:** {data['rarity']}")
