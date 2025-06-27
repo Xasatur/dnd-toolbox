@@ -62,8 +62,44 @@ elif tool == "Zauberbuch":
 elif tool == "Combat Helper":
     st.header("⚔️ Combat Helper")
 
+    # Initialisiere Combat State
+    if "combat_monsters" not in st.session_state:
+        st.session_state.combat_monsters = []
+    if "battlefield_queue" not in st.session_state:
+        st.session_state.battlefield_queue = []
+    if "combat_round" not in st.session_state:
+        st.session_state.combat_round = 0
+
+    # Neue Runde starten
+    if st.button("⏭ Neue Runde starten"):
+        st.session_state.combat_round += 1
+        st.success(f"➡️ Runde {st.session_state.combat_round}")
+
+        # Aufgeladene Battlefield Actions anzeigen
+        to_resolve = [
+            bfa for bfa in st.session_state.battlefield_queue
+            if bfa["round"] == st.session_state.combat_round
+        ]
+        if to_resolve:
+            st.markdown("### 💥 Battlefield Action Resolution")
+            for bfa in to_resolve:
+                st.info(
+                    f"🌪️ **{bfa['monster_name']} – {bfa['name']}**\n\n"
+                    f"🛡 {bfa['neutralize']}\n\n🎇 {bfa['resolution']}"
+                )
+
+        # Entferne ausgeführte Aktionen
+        st.session_state.battlefield_queue = [
+            bfa for bfa in st.session_state.battlefield_queue
+            if bfa["round"] > st.session_state.combat_round
+        ]
+
+    st.markdown(f"**📆 Aktuelle Runde: {st.session_state.combat_round}**")
+
     if st.button("🧹 Arena zurücksetzen"):
         st.session_state.combat_monsters = []
+        st.session_state.battlefield_queue = []
+        st.session_state.combat_round = 0
         st.success("Arena wurde geleert.")
 
     response = requests.get("http://localhost:8000/monsters")
@@ -77,9 +113,6 @@ elif tool == "Combat Helper":
             selected_monsters = st.multiselect(
                 "Wähle Monster zum Hinzufügen:", monster_names
             )
-
-            if "combat_monsters" not in st.session_state:
-                st.session_state.combat_monsters = []
 
             if st.button("Monster zur Arena hinzufügen"):
                 available = {f"{m['icon']} {m['name']}": m["name"] for m in monsters}
@@ -97,11 +130,34 @@ elif tool == "Combat Helper":
                 st.subheader("🧟 Aktive Monster")
                 for m in st.session_state.combat_monsters:
                     st.markdown(f"### {m.icon} {m.name} [ID: {m.id}]")
+
+                    # Normale Actions
                     actions = m.actions()
                     for i, action in enumerate(actions):
                         if st.button(f"{m.id} - {action}"):
                             result = actions[action]()
                             st.success(f"🎯 {action}:\n{result}")
+
+                    # Battlefield Actions
+                    battlefield = m.battlefield_actions()
+                    if battlefield:
+                        st.markdown("#### 🌪️ Battlefield Actions")
+                        for bfa in battlefield:
+                            label = f"{m.id} - {bfa['name']}"
+                            if st.button(label):
+                                st.session_state.battlefield_queue.append({
+                                    "monster_id": m.id,
+                                    "monster_name": m.name,
+                                    "name": bfa["name"],
+                                    "tell": bfa["tell"],
+                                    "neutralize": bfa["neutralize"],
+                                    "resolution": bfa["resolution"],
+                                    "round": st.session_state.combat_round + 1
+                                })
+                                st.warning(
+                                    f"📣 {bfa['name']} aktiviert! (Wirkung in Runde {st.session_state.combat_round + 1})"
+                                )
+                                st.info(f"🌀 {bfa['tell']}")
         else:
             st.warning("Keine Monster gefunden.")
     else:
