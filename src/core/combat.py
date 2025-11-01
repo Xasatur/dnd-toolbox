@@ -29,14 +29,20 @@ class MonsterInstance:
     def __init__(self, monster_class, instance_id):
         self.id = instance_id
         self.instance = monster_class()
-        self.name = self.instance.name
-        self.icon = self.instance.icon
         self.recharge = getattr(self.instance, "recharge_actions", {})
         self.bfa = (
             self.instance.battlefield_actions()
             if hasattr(self.instance, "battlefield_actions")
             else []
         )
+
+    @property
+    def name(self):
+        return getattr(self.instance, "name", "Unknown Monster")
+
+    @property
+    def icon(self):
+        return getattr(self.instance, "icon", "❔")
 
     def actions(self):
         return self.instance.actions()
